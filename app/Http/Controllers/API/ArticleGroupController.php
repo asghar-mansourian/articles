@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class ArticleGroupController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum'])->except('show','index');
+    }
+
     public function index()
     {
         $articleGroups = ArticleGroup::with('articles')->get();

@@ -21,7 +21,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('created_at','desc')->paginate(10);
+        $articles = Article::published()->orderBy('created_at','desc')->paginate(10);
 
         return ArticlesResource::collection($articles);
     }
@@ -42,7 +42,7 @@ class ArticleController extends Controller
         $picture = uploadFile($request->picture,'public/articles');
 
         Article::create([
-            'author_id' => 1,//Auth::id(),
+            'author_id' => auth()->user()->id,
             'article_group_id' => $request->article_group_id,
             'slug' => str_replace(' ','-',$request->title),
             'title' => $request->title,
@@ -57,7 +57,7 @@ class ArticleController extends Controller
      */
     public function show(string $slug)
     {
-        $article = Article::where('slug',$slug)->get();
+        $article = Article::published()->where('slug',$slug)->get();
         if($article)
             return ArticlesResource::collection($article);
 
@@ -82,7 +82,7 @@ class ArticleController extends Controller
         $picture = file_exists($request->picture)? uploadFile($request->picture,'public/articles'):$article->picture;
 
         $article->update([
-            'author_id' => 1,//Auth::id(),
+            'author_id' => auth()->user()->id,
             'article_group_id' => $request->article_group_id,
             'title' => $request->title,
             'slug' => str_replace(' ','-',$request->title),
@@ -90,7 +90,7 @@ class ArticleController extends Controller
             'content' => $request->content
         ]);
 
-        return ArticlesResource::collection($article);
+        return response()->json('success');
     }
 
     /**

@@ -18,6 +18,7 @@ class ArticlesResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'slug' => $this->slug,
             'picture' => url('/') . '/storage/articles/' . basename($this->picture),
             'author_name' => $this->author->name,
             'content' => $this->content,

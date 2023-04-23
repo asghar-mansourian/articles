@@ -27,10 +27,8 @@ class Article extends Model
         return $this->belongsTo(ArticleGroup::class,'article_group_id');
     }
 
-//    protected static function booted()
-//    {
-//        static::addGlobalScope('published', function(Builder $builder) {
-//            $builder->where('status', Article::STATUS_PUBLISHED);
-//        });
-//    }
+    public function scopePublished($query)
+    {
+        return $query->where('status', self::STATUS_PUBLISHED);
+    }
 }

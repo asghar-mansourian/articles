@@ -41,6 +41,10 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+// Include all helper files
+foreach (glob(__DIR__.'/../app/Helpers/*.php') as $filename) {
+    require_once $filename;
+}
 /*
 |--------------------------------------------------------------------------
 | Return The Application

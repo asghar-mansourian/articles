@@ -13,7 +13,11 @@ class Article extends Model
 
     protected $guarded = ['id'];
 
-    public function usrs()
+    const STATUS_PUBLISHED = 1;
+
+    const STATUS_UNPUBLISHED = 0;
+
+    public function author()
     {
         return $this->belongsTo(User::class,'author_id');
     }
@@ -22,4 +26,11 @@ class Article extends Model
     {
         return $this->belongsTo(ArticleGroup::class,'article_group_id');
     }
+
+//    protected static function booted()
+//    {
+//        static::addGlobalScope('published', function(Builder $builder) {
+//            $builder->where('status', Article::STATUS_PUBLISHED);
+//        });
+//    }
 }

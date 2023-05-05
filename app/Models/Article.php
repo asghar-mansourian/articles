@@ -32,6 +32,10 @@ class Article extends Model
         return $this->belongsTo(ArticleGroup::class,'article_group_id');
     }
 
+    public function votes()
+    {
+        return $this->morphMany(Vote::class,'modelable');
+    }
     public function scopePublished($query)
     {
         return $query->where('status', self::STATUS_PUBLISHED);

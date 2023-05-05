@@ -22,6 +22,7 @@ class ArticlesResource extends JsonResource
             'picture' => url('/') . '/storage/articles/' . basename($this->picture),
             'author_name' => $this->author->name,
             'content' => $this->content,
+            'vote' => $this->votes()->selectRaw('SUM(type = "like") as like_count, SUM(type = "dislike") as dislike_count')->first(),
             'view' => $this->view,
         ];
     }

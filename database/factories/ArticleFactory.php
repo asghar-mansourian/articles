@@ -21,7 +21,7 @@ class ArticleFactory extends Factory
     public function definition(): array
     {
         $title = $this->faker->sentence();
-        $image = $this->faker->image(storage_path('app\public\articles'), 300, 300);
+        $image = $this->faker->image(storage_path('app/public/articles'), 300, 300);
         $image = basename($image);
 
         return [

@@ -19,14 +19,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::namespace('API')->group(function(){
-        Route::resource('articles',ArticleController::class);
-        Route::resource('article-groups',ArticleGroupController::class);
-        Route::post('/login','LoginController@login')->name('login');
 
-        Route::post('/logout','LoginController@logout')->name('logout');
+    Route::post('/login','LoginController@login')->name('login');
 
-        Route::get('/login',function (){
-            return response()->json('you must login!');
-        });
+    Route::resource('articles',ArticleController::class);
+    Route::get('articles/show-comments/{article}','ArticleController@showComments');
+
+    Route::resource('article-groups',ArticleGroupController::class);
+
+    Route::resource('comments',CommentController::class);
+
+    Route::middleware('auth:sanctum')->group(function (){
+        Route::post('vote','VoteController');
+    });
+
+    Route::get('/login',function (){
+        return response()->json('you must login!');
+    });
+    Route::post('/logout','LoginController@logout')->name('logout');
 
 });

@@ -7,13 +7,14 @@ use App\Http\Requests\API\ArticleRequest;
 use App\Http\Requests\API\ArticleUpdatRequest;
 use App\Http\Resources\ArticlesResource;
 use App\Models\Article;
+use App\Models\Comment;
 
 class ArticleController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware(['auth:sanctum'])->except('show','index');
+        $this->middleware(['auth:sanctum'])->except('show','index','showComments');
     }
 
     /**
@@ -102,5 +103,15 @@ class ArticleController extends Controller
         deleteFile($article->picture);
         $article->delete();
         return response()->json('success');
+    }
+
+
+    public function showComments(Article $article)
+    {
+        $comments = $article->comments()->where('parent_id',null)->get();
+
+        return response()->json([
+            'data' => buildTree($comments)
+        ]);
     }
 }

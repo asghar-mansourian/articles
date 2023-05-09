@@ -31,6 +31,10 @@ Route::namespace('API')->group(function(){
 
     Route::middleware('auth:sanctum')->group(function (){
         Route::post('vote','VoteController');
+
+        Route::post('/upload-image','ImageController@upload');
+        Route::delete('/image/{name}','ImageController@destroy');
+
     });
 
     Route::get('/login',function (){

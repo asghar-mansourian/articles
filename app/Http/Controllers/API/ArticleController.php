@@ -42,14 +42,17 @@ class ArticleController extends Controller
     {
         $picture = uploadFile($request->picture,'public/articles');
 
-        Article::create([
-            'author_id' => auth()->user()->id,
-            'article_group_id' => $request->article_group_id,
-            'slug' => str_replace(' ','-',$request->title),
-            'title' => $request->title,
-            'picture' => $picture,
-            'content' => $request->content
-        ]);
+        $article = Article::create([
+                    'author_id' => auth()->user()->id,
+                    'article_group_id' => $request->article_group_id,
+                    'slug' => str_replace(' ','-',$request->title),
+                    'title' => $request->title,
+                    'picture' => $picture,
+                    'content' => $request->content
+                ]);
+
+        $this->processImages($request->input('images', []),$article);
+
         return response()->json('success');
     }
 
@@ -91,6 +94,8 @@ class ArticleController extends Controller
             'content' => $request->content
         ]);
 
+        $this->processImages($request->input('images', []),$article);
+
         return response()->json('success');
     }
 
@@ -101,6 +106,10 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
         deleteFile($article->picture);
+
+        foreach ($article->images as $image)
+            deleteFile($image->name);
+
         $article->delete();
         return response()->json('success');
     }
@@ -113,5 +122,14 @@ class ArticleController extends Controller
         return response()->json([
             'data' => buildTree($comments)
         ]);
+    }
+
+    private function processImages($images, $article)
+    {
+        foreach ($images as $image) {
+            $article->images()->create([
+                'name' => 'public/articles' . basename($image['filename']),
+            ]);
+        }
     }
 }

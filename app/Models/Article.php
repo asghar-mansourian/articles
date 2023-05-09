@@ -40,4 +40,9 @@ class Article extends Model
     {
         return $query->where('status', self::STATUS_PUBLISHED);
     }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class,'imageable');
+    }
 }
